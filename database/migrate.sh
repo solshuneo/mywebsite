@@ -8,17 +8,12 @@ SAVE_DIR="$BASE_DIR/setup"
 # Thông tin kết nối MySQL
 DB_USER="shuneo"
 DB_PASS="password"
-DB_NAME="mywebsite_db"
+DB_NAME="mywebsite"
 
 # Tạo thư mục nếu chưa có
 mkdir -p "$SAVE_DIR"
 mkdir -p "$EXECUTE_DIR"
 
-# Đảm bảo database tồn tại trước khi chạy SQL
-if ! mysql -u "$DB_USER" -p"$DB_PASS" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" 2>/dev/null; then
-    echo "Lỗi khi kết nối hoặc tạo database. Vui lòng kiểm tra user/password."
-    exit 1
-fi
 
 # Xác định STT tiếp theo dựa trên các file đã có trong thư mục setup
 # Tìm số lớn nhất từ các file run_X.ext
