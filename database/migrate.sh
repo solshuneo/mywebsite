@@ -8,7 +8,7 @@ SAVE_DIR="$BASE_DIR/setup"
 # Thông tin kết nối MySQL
 DB_USER="shuneo"
 DB_PASS="password"
-DB_NAME="mywebsite"
+DB_NAME="chatbox"
 
 # Tạo thư mục nếu chưa có
 mkdir -p "$SAVE_DIR"
