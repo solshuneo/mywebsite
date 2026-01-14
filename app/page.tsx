@@ -26,6 +26,12 @@ export default function Home() {
                             {session.user.name}
                         </span>
                         <Link
+                            href="/me"
+                            className="text-sm bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                        >
+                            Trang cá nhân
+                        </Link>
+                        <Link
                             href="/signout"
                             className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                         >
