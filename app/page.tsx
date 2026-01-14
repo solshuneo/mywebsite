@@ -2,7 +2,7 @@
 
 import { authClient } from "@/lib/auth/auth-client";
 import Link from "next/link";
-import ChatBox from "./components/ChatBox";
+import { CommunityChat } from "./components/community-chat";
 
 export default function Home() {
     const { data: session, isPending } = authClient.useSession();
@@ -57,7 +57,7 @@ export default function Home() {
             </div>
 
             {/* Chat Box ở giữa */}
-            <ChatBox />
+            <CommunityChat />
 
             {session?.user.role === "admin" && (
                 <Link href="/admin" className="text-blue-500 underline text-sm">

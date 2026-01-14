@@ -53,7 +53,7 @@ export async function POST(req: Request) {
         const code = match ? match[0] : null;
         console.log(code);
         const [result] = await connection.execute(
-            "update donation set transfered = 1 where code = ?",
+            "update donation set transfered = 1, created_at = CURRENT_TIMESTAMP where code = ?",
             [code],
         );
 

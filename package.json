@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/js-yaml": "^4.0.9",
     "better-auth": "^1.4.10",
+    "js-yaml": "^4.1.1",
     "mysql2": "^3.16.0",
     "next": "16.1.1",
     "react": "19.2.3",
