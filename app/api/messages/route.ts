@@ -3,19 +3,31 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 
-export async function GET() {
+export async function GET(req: Request) {
     try {
-        const [rows] = await pool.execute(
-            `SELECT
+        const { searchParams } = new URL(req.url);
+        const lastMessageId = searchParams.get("lastMessageId");
+
+        let query = `SELECT
                 m.id,
                 m.sender_id,
                 m.content,
                 m.createdAt,
                 u.name as sender_name
              FROM message m
-             JOIN user u ON m.sender_id = u.id
-             ORDER BY m.createdAt ASC`,
-        );
+             JOIN user u ON m.sender_id = u.id`;
+
+        const params: any[] = [];
+
+        // Nếu có lastMessageId, chỉ lấy messages mới hơn
+        if (lastMessageId) {
+            query += ` WHERE m.id > ?`;
+            params.push(lastMessageId);
+        }
+
+        query += ` ORDER BY m.createdAt ASC`;
+
+        const [rows] = await pool.execute(query, params);
 
         return NextResponse.json(rows);
     } catch (error: unknown) {

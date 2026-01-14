@@ -63,7 +63,7 @@ export function CommunityChat() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const fetchMessages = useCallback(async () => {
+    const fetchAllMessages = useCallback(async () => {
         try {
             const res = await fetch("/api/messages");
             if (!res.ok) {
@@ -79,20 +79,54 @@ export function CommunityChat() {
         }
     }, []);
 
-    useEffect(() => {
-        const initialFetch = setTimeout(() => {
-            fetchMessages();
-        }, 0);
+    const fetchNewMessages = useCallback(async () => {
+        try {
+            const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
+            
+            // Check if there are new messages first
+            const checkRes = await fetch(`/api/messages/check?lastMessageId=${lastMessageId || ""}`);
+            if (!checkRes.ok) return;
+            
+            const checkData = await checkRes.json();
+            if (!checkData.hasNew) {
+                return; // No new messages, skip fetching
+            }
 
+            // Fetch only new messages
+            const res = await fetch(`/api/messages?lastMessageId=${lastMessageId || ""}`);
+            if (!res.ok) {
+                console.error("Fetch error:", res.statusText);
+                return;
+            }
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+                setMessages((prev) => [...prev, ...data]);
+            }
+        } catch (error) {
+            console.error("Failed to fetch new messages:", error);
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        // Initial fetch - load all messages
+        fetchAllMessages();
+    }, [fetchAllMessages]);
+
+    useEffect(() => {
+        // Only check for new messages, not fetch all
         const interval = setInterval(() => {
-            fetchMessages();
-        }, 3000); // Poll every 3 seconds
+            if (messages.length > 0) {
+                fetchNewMessages();
+            } else {
+                // If no messages yet, fetch all
+                fetchAllMessages();
+            }
+        }, 10000); // Check every 10 seconds instead of 3
 
         return () => {
-            clearTimeout(initialFetch);
             clearInterval(interval);
         };
-    }, [fetchMessages]);
+    }, [messages.length, fetchNewMessages, fetchAllMessages]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -117,7 +151,10 @@ export function CommunityChat() {
 
             if (res.ok) {
                 setNewMessage("");
-                fetchMessages();
+                // Wait a bit then fetch new messages to get the one we just sent
+                setTimeout(() => {
+                    fetchNewMessages();
+                }, 500);
                 inputRef.current?.focus();
             }
         } catch (error) {
@@ -250,9 +287,7 @@ export function CommunityChat() {
                                                 </span>
                                                 <span className="text-xs text-gray-500">
                                                     {formatTime(
-                                                        message.createdAt ||
-                                                            message.created_at ||
-                                                            new Date()
+                                                        message.createdAt || new Date()
                                                     )}
                                                 </span>
                                             </div>
