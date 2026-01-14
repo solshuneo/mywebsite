@@ -41,4 +41,8 @@ export const auth = betterAuth({
         },
     },
     plugins: [admin()],
+    // advanced: {
+    //     useSecureCookies: true,
+    // },
+    // trustedOrigins: ["http://shuneo.com"],
 });

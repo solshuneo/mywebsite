@@ -112,7 +112,8 @@ export default function ChatBox() {
                 </form>
             ) : (
                 <div className="p-4 border-t text-center text-gray-500 bg-gray-50">
-                    Please sign in to join the conversation.
+                    If you feel this website is graphic terrible, please leave a
+                    review on my website. Thank you!
                 </div>
             )}
         </div>

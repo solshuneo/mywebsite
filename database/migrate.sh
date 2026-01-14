@@ -44,7 +44,7 @@ for file_path in $files; do
         fi
     elif [[ "$extension" == "sql" ]]; then
         # Chạy file SQL vào database đã định nghĩa
-        if mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < "$file_path" > /dev/null 2>&1; then
+        if mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < "$file_path" ; then
             success=true
         else
             echo "Lỗi khi thực thi $filename"

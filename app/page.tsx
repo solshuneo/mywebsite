@@ -18,7 +18,7 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 gap-6">
             <div className="w-full max-w-2xl flex justify-between items-center">
-                <h1 className="text-2xl font-bold">My Website</h1>
+                <h1 className="text-2xl font-bold">Chatbox</h1>
 
                 {session ? (
                     <div className="flex items-center gap-4">
